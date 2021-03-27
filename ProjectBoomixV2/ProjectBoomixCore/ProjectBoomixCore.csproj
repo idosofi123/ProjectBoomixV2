@@ -12,4 +12,9 @@
     <OutputPath>D:\Users\USER\Desktop\ProjectBoomix\RepositoryV2\ProjectBoomixV2\ProjectBoomixV2\Build\Core\Release\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DefaultEcs" Version="0.15.1" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+  </ItemGroup>
+
 </Project>
