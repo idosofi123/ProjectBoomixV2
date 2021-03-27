@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\Users\USER\Desktop\ProjectBoomix\RepositoryV2\ProjectBoomixV2\ProjectBoomixV2\Build\Core\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>D:\Users\USER\Desktop\ProjectBoomix\RepositoryV2\ProjectBoomixV2\ProjectBoomixV2\Build\Core\Release\</OutputPath>
+  </PropertyGroup>
+
+</Project>
