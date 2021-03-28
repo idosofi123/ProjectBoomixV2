@@ -13,4 +13,19 @@
     <OutputPath>D:\Users\USER\Desktop\ProjectBoomix\RepositoryV2\ProjectBoomixV2\ProjectBoomixV2\Build\Server\Release\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="LiteNetLib" Version="0.9.4" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectBoomixCore\ProjectBoomixCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
