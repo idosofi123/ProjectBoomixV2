@@ -51,5 +51,21 @@ namespace ProjectBoomixClient {
             this.pressDuration.TryGetValue(key, out duration);
             return duration;
         }
+
+        public bool IsJustPressed(Keys key) {
+            return CurrentKeyboardState.IsKeyDown(key) && PreviousKeyboardState.IsKeyUp(key);
+        }
+
+        public bool isJustReleased(Keys key) {
+            return CurrentKeyboardState.IsKeyUp(key) && PreviousKeyboardState.IsKeyDown(key);
+        }
+
+        public bool isKeyDown(Keys key) {
+            return CurrentKeyboardState.IsKeyDown(key);
+        }
+
+        public bool isKeyUp(Keys key) {
+            return CurrentKeyboardState.IsKeyUp(key);
+        }
     }
 }
