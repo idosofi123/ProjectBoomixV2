@@ -64,7 +64,7 @@ namespace ProjectBoomixCore.Networking {
 
                 // Playing catch-up and updating the game state in a fixed timestep.
                 while (tickLag >= TICKS_PER_FRAME) {
-                    this.Game.Update();
+                    //this.Game.Update();
                     tickLag -= TICKS_PER_FRAME;
                 }
 
