@@ -12,7 +12,7 @@ namespace ProjectBoomixClient.Screening.Screens {
             throw new NotImplementedException();
         }
 
-        public override void HandleInput(GameTime gameTime, InputState inputState) {
+        public override void HandleInput(InputState inputState) {
             throw new NotImplementedException();
         }
 

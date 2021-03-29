@@ -4,10 +4,10 @@ namespace ProjectBoomixClient {
     public static class AssetsPaths {
 
         // Pregame Screen
-        public const string PregameBackground = "Backgrounds/PreGame";
+        public static readonly string PregameBackground = "Backgrounds/PreGame";
 
         // Global
-        public const string RegularFont = "Fonts/Regular";
-        public const string Spinner = "Etc/Spinner";
+        public static readonly string RegularFont = "Fonts/Regular";
+        public static readonly string Spinner = "Etc/Spinner";
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectBoomixClient.Screening {
 
-    public abstract class Screen : IUpdateable, IDrawable, IDisposable {
+    public abstract class Screen : IUpdateable, IDrawable, IDisposable, IInputResponsive {
 
         public delegate void ScreenExited(Screen nextScreen);
 
@@ -21,7 +21,7 @@ namespace ProjectBoomixClient.Screening {
 
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
-        public abstract void HandleInput(GameTime gameTime, InputState inputState);
+        public abstract void HandleInput(InputState inputState);
 
         public abstract void Dispose();
 

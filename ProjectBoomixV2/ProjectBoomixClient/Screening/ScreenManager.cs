@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectBoomixClient.Screening {
 
-    public sealed class ScreenManager : IUpdateable, IDrawable, IDisposable {
+    public sealed class ScreenManager : IUpdateable, IInputResponsive, IDrawable, IDisposable {
 
         private readonly ContentManager contentManager;
         private Screen activeScreen;
@@ -21,8 +21,8 @@ namespace ProjectBoomixClient.Screening {
             this.activeScreen.Init(this.contentManager);
         }
 
-        public void HandleInput(GameTime gameTime, InputState inputState) {
-            this.activeScreen.HandleInput(gameTime, inputState);
+        public void HandleInput(InputState inputState) {
+            this.activeScreen.HandleInput(inputState);
         }
 
         public void Update(GameTime gameTime) {

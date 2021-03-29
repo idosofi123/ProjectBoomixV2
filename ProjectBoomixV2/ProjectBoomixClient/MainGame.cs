@@ -17,10 +17,7 @@ namespace ProjectBoomixClient {
 
             // Graphics and assets
             this.graphics = new GraphicsDeviceManager(this);
-            this.SetScreenSize(1024, 596, false);
             this.Content.RootDirectory = "Content";
-            VirtualResolution.InitResolution(this);
-            GlobalResources.LoadGlobalResources(this.Content);
 
             // Screening and input
             this.screenManager = new ScreenManager(this.Content);
@@ -28,8 +25,10 @@ namespace ProjectBoomixClient {
         }
 
         protected override void Initialize() {
-            base.Initialize();
+            this.SetScreenSize(1920, 1080, true);
+            VirtualResolution.InitResolution(this);
             GameClient.Instance.ConnectToServer();
+            base.Initialize();
         }
 
         protected override void LoadContent() {
@@ -37,13 +36,16 @@ namespace ProjectBoomixClient {
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Load assets that are all across the application.
+            GlobalResources.LoadGlobalResources(this.Content);
+
             // Set the initial screen and load its content.
             this.screenManager.SwitchScreen(new PregameScreen());
         }
 
         protected override void Update(GameTime gameTime) {
             this.inputState.Update(gameTime);
-            this.screenManager.HandleInput(gameTime, this.inputState);
+            this.screenManager.HandleInput(this.inputState);
             this.screenManager.Update(gameTime);
             base.Update(gameTime);
         }
@@ -55,10 +57,10 @@ namespace ProjectBoomixClient {
         }
 
         private void SetScreenSize(int width, int height, bool isFullScreen) {
-            graphics.PreferredBackBufferWidth = width;
-            graphics.PreferredBackBufferHeight = height;
-            graphics.IsFullScreen = isFullScreen;
-            graphics.ApplyChanges();
+            this.graphics.PreferredBackBufferWidth = width;
+            this.graphics.PreferredBackBufferHeight = height;
+            this.graphics.IsFullScreen = isFullScreen;
+            this.graphics.ApplyChanges();
         }
     }
 }
