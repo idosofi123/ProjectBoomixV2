@@ -86,6 +86,7 @@ namespace ProjectBoomixServer {
             NetDataWriter packetWrapper = new NetDataWriter();
             packetWrapper.Put(packet.Serialize());
             this.server.SendToAll(packetWrapper, DeliveryMethod.ReliableOrdered);
+            Program.Logger.Info($"Game started on port {this.port}!");
         }
 
         public override void Start() {

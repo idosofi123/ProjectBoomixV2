@@ -2,7 +2,7 @@
   "profiles": {
     "ProjectBoomixClient": {
       "commandName": "Project",
-      "commandLineArgs": "localhost:17420 idoplay:1"
+      "commandLineArgs": "localhost:17420 tay2pie:1"
     }
   }
 }
