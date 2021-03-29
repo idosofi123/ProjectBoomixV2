@@ -8,7 +8,7 @@ namespace ProjectBoomixCore.Networking {
 
         public event GameStarted GameStartedEvent;
 
-        protected abstract void PoolServerEvents();
+        public abstract void PollServerEvents();
 
         public abstract void SendPacketToServer(ClientPacket packet);
 

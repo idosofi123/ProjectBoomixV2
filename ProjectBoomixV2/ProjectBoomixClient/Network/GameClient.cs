@@ -48,7 +48,7 @@ namespace ProjectBoomixClient.Network {
             }
         }
 
-        protected override void PoolServerEvents() {
+        public override void PollServerEvents() {
             this.client.PollEvents();
         }
     }

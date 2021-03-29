@@ -18,6 +18,8 @@ namespace ProjectBoomixClient {
 
             using (var game = new MainGame()) {
 
+                // TODO: Handle case of argument dismantling failing (illegal launch)
+
                 string[] hostDestination = args[0].Split(new[] { ':' });
                 string[] userCredentials = args[1].Split(new[] { ':' });
                 LaunchArgs = new LaunchArguments {

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProjectBoomixClient": {
+      "commandName": "Project",
+      "commandLineArgs": "localhost:17420 idoplay:1"
+    }
+  }
+}

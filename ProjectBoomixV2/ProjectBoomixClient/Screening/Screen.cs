@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectBoomixClient.Screening {
 
-    public abstract class Screen : IUpdateable, IDisposable {
+    public abstract class Screen : IUpdateable, IDrawable, IDisposable {
 
         public delegate void ScreenExited(Screen nextScreen);
 
