@@ -21,5 +21,7 @@ namespace ProjectBoomixCore.Networking.Packets {
         public static Packet Deserialize(byte[] packetBytes) {
             return Serializer.Deserialize<Packet>(new MemoryStream(packetBytes));
         }
+
+        public abstract bool CanBeDropped();
     }
 }

@@ -19,5 +19,8 @@ namespace ProjectBoomixCore.Networking.Packets {
             Console.WriteLine($"{clientID} MOVED TO THE {Direction}");
         }
 
+        public override bool CanBeDropped() {
+            return true;
+        }
     }
 }

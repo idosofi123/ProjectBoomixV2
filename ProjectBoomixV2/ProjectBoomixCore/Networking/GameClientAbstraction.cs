@@ -6,9 +6,11 @@ namespace ProjectBoomixCore.Networking {
 
         public delegate void GameStarted();
 
-        public abstract void SendPacketToServer(ClientPacket packet);
-
         public event GameStarted GameStartedEvent;
+
+        protected abstract void PoolServerEvents();
+
+        public abstract void SendPacketToServer(ClientPacket packet);
 
         // Interface exposed to packets -
         public void HandleGameStarted() {

@@ -8,5 +8,9 @@ namespace ProjectBoomixCore.Networking.Packets {
         public override void ApplyPacket(GameClientAbstraction client) {
             client.HandleGameStarted();
         }
+
+        public override bool CanBeDropped() {
+            return false;
+        }
     }
 }
