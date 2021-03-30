@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using ProtoBuf;
 
 namespace ProjectBoomixCore.Networking.Packets {
@@ -10,7 +9,6 @@ namespace ProjectBoomixCore.Networking.Packets {
     public abstract class Packet {
         
         public byte[] Serialize() {
-            byte[] data;
 
             using (MemoryStream stream = new MemoryStream()) {
                 Serializer.Serialize(stream, this);

@@ -10,6 +10,8 @@ namespace ProjectBoomixCore.Networking.Packets {
         [ProtoMember(1)]
         public MoveDirection Direction { get; set; }
 
+        public MovePacket() { }
+
         public MovePacket(MoveDirection direction) {
             this.Direction = direction;
         }

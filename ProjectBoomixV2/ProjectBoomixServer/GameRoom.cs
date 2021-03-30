@@ -12,9 +12,10 @@ namespace ProjectBoomixServer {
     /// </summary>
     public sealed class GameRoom : GameRoomAbstraction {
 
-        private NetManager            server;
-        private EventBasedNetListener eventListener;
-        private ushort                port;
+        private NetManager                  server;
+        private Dictionary<string, NetPeer> peers;
+        private EventBasedNetListener       eventListener;
+        private ushort                      port;
 
         public GameRoom(ushort port, List<string> playerWhitelist) : base(playerWhitelist) {
 
@@ -25,6 +26,7 @@ namespace ProjectBoomixServer {
             this.eventListener.NetworkReceiveEvent    += this.HandleNetworkReceive;
 
             this.server = new NetManager(this.eventListener);
+            this.peers = new Dictionary<string, NetPeer>();
         }
 
         // LiteNetLib Event Handling ~
@@ -40,7 +42,7 @@ namespace ProjectBoomixServer {
             Program.Logger.Info($"Login details - ID: {clientID}, Password: {clientPassword}");
 
             if (this.playersToBeApproved.Contains(clientID)) {
-                request.Accept();
+                this.peers.Add(clientID, request.Accept());
                 playersToBeApproved.Remove(clientID);
                 if (playersToBeApproved.Count == 0) {
                     this.EndMatchmakingAndStartGame();

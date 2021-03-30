@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using ProjectBoomixCore.Game;
+using ProjectBoomixCore.Networking.Packets;
 using ProjectBoomixClient.Network;
 
 namespace ProjectBoomixClient.Screening.Screens {
@@ -13,11 +16,19 @@ namespace ProjectBoomixClient.Screening.Screens {
         }
 
         public override void HandleInput(InputState inputState) {
-            //throw new NotImplementedException();
+            if (inputState.isKeyDown(Keys.Right) || inputState.isKeyDown(Keys.Left)) {
+                MoveDirection direction;
+                if (inputState.isKeyDown(Keys.Right) && inputState.isKeyDown(Keys.Left)) {
+                    direction = inputState.GetPressDuration(Keys.Right) < inputState.GetPressDuration(Keys.Left) ? MoveDirection.Right : MoveDirection.Left;
+                } else {
+                    direction = inputState.isKeyDown(Keys.Right) ? MoveDirection.Right : MoveDirection.Left;
+                }
+                GameClient.Instance.SendPacketToServer(new MovePacket(direction));
+            }
         }
 
         public override void Update(GameTime gameTime) {
-            //throw new NotImplementedException();
+            GameClient.Instance.PollServerEvents();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {

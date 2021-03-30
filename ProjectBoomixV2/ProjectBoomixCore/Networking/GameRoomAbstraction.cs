@@ -12,10 +12,11 @@ namespace ProjectBoomixCore.Networking {
     /// </summary>
     public abstract class GameRoomAbstraction {
 
-        private const int FPS                 = 60;
-        private readonly long TICKS_PER_FRAME = Stopwatch.Frequency / FPS;
+        private readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
         public GameInstance Game { get; private set; }
+
+        private Dictionary<string, int> clientIDtoEntityID;
 
         protected Thread                  gameRoomThread;
         protected List<string>            playersToBeApproved;
@@ -27,7 +28,8 @@ namespace ProjectBoomixCore.Networking {
             this.gameRoomThread = new Thread(this.RunHostLoop);
             this.packetsToHandle = new Queue<SentClientPacket>();
             this.playersToBeApproved = playerWhitelist;
-            this.Game = new GameInstance();
+            this.clientIDtoEntityID = new Dictionary<string, int>();
+            this.Game = new GameInstance(playerWhitelist, this.clientIDtoEntityID);
         }
 
         protected abstract void PoolClientEvents();
@@ -64,7 +66,7 @@ namespace ProjectBoomixCore.Networking {
 
                 // Playing catch-up and updating the game state in a fixed timestep.
                 while (tickLag >= TICKS_PER_FRAME) {
-                    //this.Game.Update();
+                    this.Game.Update();
                     tickLag -= TICKS_PER_FRAME;
                 }
 

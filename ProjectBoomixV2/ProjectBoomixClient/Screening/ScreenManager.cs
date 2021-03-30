@@ -15,6 +15,7 @@ namespace ProjectBoomixClient.Screening {
         }
 
         public void SwitchScreen(Screen newScreen) {
+            this.activeScreen.ScreenExitedEvent -= this.SwitchScreen;
             this.activeScreen?.Dispose();
             this.activeScreen = newScreen;
             this.activeScreen.ScreenExitedEvent += this.SwitchScreen;
