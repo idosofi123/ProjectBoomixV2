@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixClient.Network;
 using ProjectBoomixCore.Networking.Packets;
@@ -12,11 +11,8 @@ namespace ProjectBoomixClient.Screening.Screens {
 
     public sealed class InGameScreen : Screen {
 
-        private World world;
-
         public override void Init(ContentManager contentManager) {
-            world = new WorldBuilder().AddSystem(new ClientSystem()).Build();
-            world.Initialize();
+
         }
 
         public override void HandleInput(InputState inputState) {
@@ -37,7 +33,6 @@ namespace ProjectBoomixClient.Screening.Screens {
 
         public override void Update(GameTime gameTime) {
             GameClient.Instance.PollServerEvents();
-            world.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {

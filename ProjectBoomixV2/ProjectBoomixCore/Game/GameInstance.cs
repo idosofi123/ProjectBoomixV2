@@ -2,7 +2,6 @@
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game.Systems;
 using ProjectBoomixCore.Game.Prefabs;
-using ProjectBoomixCore.Game.Components;
 
 namespace ProjectBoomixCore.Game {
 

@@ -101,5 +101,14 @@ namespace ProjectBoomixServer {
             this.server.PollEvents();
         }
 
+        protected override void SendPacketToClients(ServerPacket packet) {
+            NetDataWriter wrapper = new NetDataWriter();
+            wrapper.Put(packet.Serialize());
+            this.server.SendToAll(wrapper, packet.CanBeDropped() ? DeliveryMethod.ReliableSequenced : DeliveryMethod.ReliableOrdered);
+        }
+
+        protected override void BroadcastNewGameState(float updateTickLag) {
+            this.SendPacketToClients(new GameStatePacket(base.Game.GetExternalChanges(), updateTickLag));
+        }
     }
 }

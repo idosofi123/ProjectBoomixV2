@@ -3,7 +3,7 @@
 namespace ProjectBoomixCore.Game.Components {
 
     [ProtoContract]
-    public class Position : VectorComponent, IExternal {
+    public class Position : VectorComponent, IExternal<Position> {
 
         [ProtoMember(1)]
         private bool hasChanged;
@@ -15,5 +15,10 @@ namespace ProjectBoomixCore.Game.Components {
         }
 
         public Position() : this(0, 0) { }
+
+        public void SyncWithServerComponent(Position serverComponent) {
+            this.X = serverComponent.X;
+            this.Y = serverComponent.Y;
+        }
     }
 }

@@ -34,6 +34,10 @@ namespace ProjectBoomixCore.Networking {
 
         protected abstract void PoolClientEvents();
 
+        protected abstract void BroadcastNewGameState(float updateTickLag);
+
+        protected abstract void SendPacketToClients(ServerPacket packet);
+
         public virtual void Start() {
             this.IsRunning = true;
             this.gameRoomThread.Start();
@@ -70,8 +74,8 @@ namespace ProjectBoomixCore.Networking {
                     tickLag -= TICKS_PER_FRAME;
                 }
 
-                // TODO: Broadcast new game state and include remaining lag for rendering extrapolation.
-                // this.Broadcast(game.CurrState, tickLag);
+                // Broadcast new game state and include remaining lag for rendering extrapolation.
+                this.BroadcastNewGameState(tickLag);
             }
         }
 
