@@ -12,18 +12,23 @@ namespace ProjectBoomixCore.Game.Systems {
 
         public MovementSystem() : base(Aspect.All(new[] { typeof(Position), typeof(Velocity) })) { }
 
-
         public override void Initialize(IComponentMapperService mapperService) {
             this.positionMapper = mapperService.GetMapper<Position>();
             this.velocityMapper = mapperService.GetMapper<Velocity>();
         }
 
         public override void Process(GameTime gameTime, int entityId) {
+
             Position entityPosition = positionMapper.Get(entityId);
             Velocity entityVelocity = velocityMapper.Get(entityId);
-            entityPosition.Vector += entityVelocity.Vector;
-            entityVelocity.X = 0;
-            entityVelocity.Y = 0;
+
+            if (entityVelocity.X != 0 || entityVelocity.Y != 0) {
+                entityPosition.X += entityVelocity.X;
+                entityPosition.Y += entityVelocity.Y;
+                entityPosition.HasChanged = true;
+                entityVelocity.X = 0;
+                entityVelocity.Y = 0;
+            }
         }
     }
 }

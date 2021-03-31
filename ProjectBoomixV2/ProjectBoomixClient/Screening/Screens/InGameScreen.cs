@@ -3,19 +3,25 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
-using ProjectBoomixCore.Networking.Packets;
 using ProjectBoomixClient.Network;
+using ProjectBoomixCore.Networking.Packets;
 
 namespace ProjectBoomixClient.Screening.Screens {
 
     public sealed class InGameScreen : Screen {
 
+        private World world;
+
         public override void Init(ContentManager contentManager) {
-            //throw new NotImplementedException();
+            world = new WorldBuilder().AddSystem(new ClientSystem()).Build();
+            world.Initialize();
         }
 
         public override void HandleInput(InputState inputState) {
+
+            // Movement handling
             if (inputState.isKeyDown(Keys.Right) || inputState.isKeyDown(Keys.Left)) {
                 MoveDirection direction;
                 if (inputState.isKeyDown(Keys.Right) && inputState.isKeyDown(Keys.Left)) {
@@ -25,10 +31,13 @@ namespace ProjectBoomixClient.Screening.Screens {
                 }
                 GameClient.Instance.SendPacketToServer(new MovePacket(direction));
             }
+
+
         }
 
         public override void Update(GameTime gameTime) {
             GameClient.Instance.PollServerEvents();
+            world.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {

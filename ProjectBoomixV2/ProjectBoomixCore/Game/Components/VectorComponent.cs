@@ -1,18 +1,22 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ProtoBuf;
 
 namespace ProjectBoomixCore.Game.Components {
 
+    [ProtoContract]
+    [ProtoInclude(1, typeof(Position))]
     public abstract class VectorComponent {
 
-        public Vector2 Vector;
+        [ProtoMember(1)]
+        public float X { get; set; }
+
+        [ProtoMember(2)]
+        public float Y { get; set; }
 
         public VectorComponent(float x, float y) {
-            this.Vector = new Vector2(x, y);
+            this.X = x;
+            this.Y = y;
         }
 
         public VectorComponent() : this(0, 0) { }
-
-        public float X { get => Vector.X; set => Vector.X = value; }
-        public float Y { get => Vector.Y; set => Vector.Y = value; }
     }
 }

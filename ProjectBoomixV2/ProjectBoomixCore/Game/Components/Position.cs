@@ -1,8 +1,19 @@
-﻿
+﻿using ProtoBuf;
+
 namespace ProjectBoomixCore.Game.Components {
 
-    public class Position : VectorComponent {
-        public Position() : base() { }
-        public Position(float x, float y) : base(x, y) { }
+    [ProtoContract]
+    public class Position : VectorComponent, IExternal {
+
+        [ProtoMember(1)]
+        private bool hasChanged;
+
+        public bool HasChanged { get => hasChanged; set => hasChanged = value; }
+
+        public Position(float x, float y) : base(x, y) {
+            hasChanged = true;
+        }
+
+        public Position() : this(0, 0) { }
     }
 }

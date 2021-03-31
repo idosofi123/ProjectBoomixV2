@@ -2,6 +2,7 @@
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game.Systems;
 using ProjectBoomixCore.Game.Prefabs;
+using ProjectBoomixCore.Game.Components;
 
 namespace ProjectBoomixCore.Game {
 
@@ -9,10 +10,14 @@ namespace ProjectBoomixCore.Game {
 
         public static readonly int FPS = 60;
 
-        private World world = new WorldBuilder().AddSystem(new MovementSystem()).Build();
+        private World world;
+        private ExternalStateSystem externalStateSystem;
 
         public GameInstance(List<string> players, Dictionary<string, int> playerToEntityID) {
-            world.Initialize();
+
+            this.externalStateSystem = new ExternalStateSystem();
+            this.world = new WorldBuilder().AddSystem(new MovementSystem()).AddSystem(this.externalStateSystem).Build();
+
             foreach (string player in players) {
                 Entity newEntity = Player.AddPlayerEntity(world);
                 playerToEntityID.Add(player, newEntity.Id);
@@ -21,6 +26,10 @@ namespace ProjectBoomixCore.Game {
 
         public void Update() {
             this.world.Update(null);
+        }
+
+        public ExternalComponentChange[] GetExternalChanges() {
+            return this.externalStateSystem.GetAndClearAllChanges();
         }
 
     }
