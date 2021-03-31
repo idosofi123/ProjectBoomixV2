@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Networking.Packets;
 
@@ -14,7 +15,7 @@ namespace ProjectBoomixCore.Networking {
 
         private readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
-        public GameInstance Game { get; private set; }
+        private GameInstance Game;
 
         private Dictionary<string, int> clientIDtoEntityID;
 
@@ -80,6 +81,8 @@ namespace ProjectBoomixCore.Networking {
         }
 
         // API exposed to incoming packets -
-
+        public Entity GetPlayerEntity(string clientID) {
+            return Game.GetEntity(this.clientIDtoEntityID[clientID]);
+        }
     }
 }

@@ -31,5 +31,8 @@ namespace ProjectBoomixCore.Game {
             return this.externalStateSystem.GetAndClearAllChanges();
         }
 
+        public Entity GetEntity(int id) {
+            return world.GetEntity(id);
+        }
     }
 }
