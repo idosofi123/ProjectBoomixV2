@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Networking.Packets;
 
@@ -39,6 +40,14 @@ namespace ProjectBoomixCore.Networking {
             Entity newEntity = this.world.CreateEntity();
             serverToClientEntityID[serverID] = newEntity.Id;
             return newEntity;
+        }
+
+        public delegate void EntityAction(Entity entity);
+
+        public void PerformOverEntities(EntityAction action) {
+            foreach (int id in serverToClientEntityID.Values) {
+                action(this.world.GetEntity(id));
+            }
         }
     }
 }
