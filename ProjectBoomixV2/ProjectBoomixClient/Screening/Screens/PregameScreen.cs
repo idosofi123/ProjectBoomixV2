@@ -41,6 +41,8 @@ namespace ProjectBoomixClient.Screening.Screens {
             // Draw background image.
             spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
 
+            spriteBatch.DrawString(GlobalResources.RegularFont, $"FPS: {(int)Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(1740, 30), Color.LightGreen);
+
             spinner.Draw(gameTime, spriteBatch);
 
             spriteBatch.DrawString(GlobalResources.RegularFont, LOADING_MESSAGE, new Vector2(TITLE_X, TITLE_Y), Color.White);

@@ -13,7 +13,7 @@ namespace ProjectBoomixCore.Networking {
     /// </summary>
     public abstract class GameRoomAbstraction {
 
-        private readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
+        private static readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
         protected GameInstance Game;
 
@@ -59,8 +59,9 @@ namespace ProjectBoomixCore.Networking {
 
                 // Measure elapsed time.
                 stopwatch.Stop();
-                tickLag += stopwatch.Elapsed.Ticks;
-                stopwatch.Start();
+                tickLag += stopwatch.ElapsedTicks;
+
+                stopwatch.Restart();
 
                 // Process user input of last frame.
                 this.PoolClientEvents();
@@ -70,8 +71,7 @@ namespace ProjectBoomixCore.Networking {
                 }
 
                 // Playing catch-up and updating the game state in a fixed timestep.
-                //while (tickLag >= TICKS_PER_FRAME) {
-                if (tickLag >= TICKS_PER_FRAME) {
+                while (tickLag >= TICKS_PER_FRAME) {
                     this.Game.Update();
                     tickLag -= TICKS_PER_FRAME;
                 }

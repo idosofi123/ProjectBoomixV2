@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Networking;
 using ProjectBoomixCore.Networking.Packets;
 
@@ -112,8 +113,10 @@ namespace ProjectBoomixServer {
         }
 
         protected override void BroadcastNewGameState(float updateTickLag) {
-            //System.Console.WriteLine("BROADCAST");
-            this.SendPacketToClients(new GameStatePacket(base.Game.GetExternalChanges(), updateTickLag));
+            ExternalComponentChange[] changes = base.Game.GetExternalChanges();
+            if (changes.Length > 0) {
+                this.SendPacketToClients(new GameStatePacket(changes, updateTickLag));
+            }
         }
     }
 }

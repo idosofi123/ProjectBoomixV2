@@ -25,16 +25,16 @@ namespace ProjectBoomixCore.Game.Systems {
 
             if (entityVelocity.X != 0 || entityVelocity.Y != 0) {
 
-                //System.Console.WriteLine("PROCESS MOVEMENT");
                 entityPosition.X += entityVelocity.X;
                 entityPosition.Y += entityVelocity.Y;
+
                 entityPosition.HasChanged = true;
 
-                entityVelocity.X *= 0.99999f;
-                if (Math.Abs(entityVelocity.X) <  0.3) {
-                    entityVelocity.X = 0;
-                }
-                //entityVelocity.Y *= 0.99f;
+                //entityVelocity.X *= 0.9f;
+                //if (Math.Abs(entityVelocity.X) <= 0.1) {
+                //    entityVelocity.X = 0;
+                //}
+                entityVelocity.X = 0;
             }
         }
     }
