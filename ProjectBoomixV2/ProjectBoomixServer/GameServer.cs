@@ -8,12 +8,12 @@ namespace ProjectBoomixServer {
 
         public static GameServer Instance { get; } = new GameServer();
 
-        private readonly Dictionary<string, GameRoom> gameRooms;
+        private readonly Dictionary<ushort, GameRoom> gameRooms;
 
         public readonly HttpClient WebServerClient;
 
         private GameServer() {
-            this.gameRooms = new Dictionary<string, GameRoom>();
+            this.gameRooms = new Dictionary<ushort, GameRoom>();
             this.WebServerClient = new HttpClient();
         }
 
@@ -21,8 +21,8 @@ namespace ProjectBoomixServer {
             // TODO: Main server loop - creates game rooms for users to connect to and such, communicate with rest API server
 
             // Temporarily - add a single game room for the testing
-            GameRoom tempGameRoom = new GameRoom(17420, new List<string>(new[] { "idoplay", "tay2pie" })); // temp of course
-            gameRooms.Add("1", tempGameRoom);
+            GameRoom tempGameRoom = new GameRoom(17420, new List<string>(new[] { "idoplay", "tay2pie" }));
+            gameRooms.Add(17420, tempGameRoom);
 
             tempGameRoom.Start();
         }

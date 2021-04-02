@@ -1,5 +1,4 @@
-﻿using System;
-using ProtoBuf;
+﻿using ProtoBuf;
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Game.Components;
@@ -20,7 +19,7 @@ namespace ProjectBoomixCore.Networking.Packets {
 
         public override void ApplyPacket(GameRoomAbstraction host, string clientID) {
             Entity playerEntity = host.GetPlayerEntity(clientID);
-            playerEntity.Get<Velocity>().X += (Direction == MoveDirection.Right) ? 6 : -6;
+            playerEntity.Get<Velocity>().X = (Direction == MoveDirection.Right) ? 6 : -6;
         }
 
         public override bool CanBeDropped() {

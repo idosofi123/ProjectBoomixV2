@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using ProjectBoomixCore.Game.Components;
@@ -23,11 +24,17 @@ namespace ProjectBoomixCore.Game.Systems {
             Velocity entityVelocity = velocityMapper.Get(entityId);
 
             if (entityVelocity.X != 0 || entityVelocity.Y != 0) {
+
+                //System.Console.WriteLine("PROCESS MOVEMENT");
                 entityPosition.X += entityVelocity.X;
                 entityPosition.Y += entityVelocity.Y;
                 entityPosition.HasChanged = true;
-                entityVelocity.X = 0;
-                entityVelocity.Y = 0;
+
+                entityVelocity.X *= 0.99999f;
+                if (Math.Abs(entityVelocity.X) <  0.3) {
+                    entityVelocity.X = 0;
+                }
+                //entityVelocity.Y *= 0.99f;
             }
         }
     }

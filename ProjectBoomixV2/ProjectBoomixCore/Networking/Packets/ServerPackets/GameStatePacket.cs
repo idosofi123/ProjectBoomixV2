@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using System.Collections.Generic;
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Game.Components;
@@ -14,7 +15,9 @@ namespace ProjectBoomixCore.Networking.Packets {
         [ProtoMember(2)]
         public float UpdateTickLag { get; set; }
 
-        public GameStatePacket() { }
+        public GameStatePacket() {
+            Changes = new ExternalComponentChange[0];
+        }
 
         public GameStatePacket(ExternalComponentChange[] changes, float updateTickLag) {
             this.Changes = changes;
@@ -25,18 +28,18 @@ namespace ProjectBoomixCore.Networking.Packets {
 
             foreach (ExternalComponentChange change in Changes) {
 
-                Entity entity = client.GetEntity(change.EntityID);
-
-                // If the entity has not been created in the client yet, do so.
-                // TODO: Handle with exceptions and not null-checking
-                if (entity == null) {
+                Entity entity;
+                try {
+                    entity = client.GetEntity(change.EntityID);
+                } catch (KeyNotFoundException e) {
                     entity = client.AddNewEntity(change.EntityID);
+                    entity.GetType().GetMethod("Attach").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, new[] { change.NewComponent });
                 }
 
-                IExternal<object> currentComponent =
-                    (IExternal<object>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
+                IExternal<Position> currentComponent =
+                    (IExternal<Position>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
 
-                currentComponent.SyncWithServerComponent(change.NewComponent);
+                currentComponent.SyncWithServerComponent((Position)(change.NewComponent));
             }
         }
 

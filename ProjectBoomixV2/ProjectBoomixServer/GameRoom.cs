@@ -14,6 +14,7 @@ namespace ProjectBoomixServer {
 
         private NetManager                  server;
         private Dictionary<string, NetPeer> peers;
+        private Dictionary<int, string> peerIDToClientID;
         private EventBasedNetListener       eventListener;
         private ushort                      port;
 
@@ -27,6 +28,7 @@ namespace ProjectBoomixServer {
 
             this.server = new NetManager(this.eventListener);
             this.peers = new Dictionary<string, NetPeer>();
+            this.peerIDToClientID = new Dictionary<int, string>();
         }
 
         // LiteNetLib Event Handling ~
@@ -42,7 +44,9 @@ namespace ProjectBoomixServer {
             Program.Logger.Info($"Login details - ID: {clientID}, Password: {clientPassword}");
 
             if (this.playersToBeApproved.Contains(clientID)) {
-                this.peers.Add(clientID, request.Accept());
+                NetPeer newPeer = request.Accept();
+                this.peers.Add(clientID, newPeer);
+                this.peerIDToClientID[newPeer.Id] = clientID;
                 playersToBeApproved.Remove(clientID);
                 if (playersToBeApproved.Count == 0) {
                     this.EndMatchmakingAndStartGame();
@@ -74,10 +78,10 @@ namespace ProjectBoomixServer {
                 byte[] packetBytes = new byte[reader.AvailableBytes];
                 reader.GetBytes(packetBytes, reader.AvailableBytes);
                 base.packetsToHandle.Enqueue(
-                    new SentClientPacket((ClientPacket)Packet.Deserialize(packetBytes), peer.Id.ToString())
+                    new SentClientPacket((ClientPacket)Packet.Deserialize(packetBytes), this.peerIDToClientID[peer.Id])
                 );
             } catch (InvalidCastException e) {
-                Program.Logger.Error($"Garbage packet received from peer ID: {peer.Id}");
+                Program.Logger.Error($"Garbage packet received from peer: {peer.Id}");
             }
         }
 
@@ -108,6 +112,7 @@ namespace ProjectBoomixServer {
         }
 
         protected override void BroadcastNewGameState(float updateTickLag) {
+            //System.Console.WriteLine("BROADCAST");
             this.SendPacketToClients(new GameStatePacket(base.Game.GetExternalChanges(), updateTickLag));
         }
     }

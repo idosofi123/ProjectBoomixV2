@@ -8,23 +8,24 @@ namespace ProjectBoomixCore.Game.Systems {
 
     public sealed class ExternalStateSystem : EntityProcessingSystem {
 
-        private ComponentMapper<IExternal> componentMapper;
+        private ComponentMapper<Position> positionMapper;
         private Queue<ExternalComponentChange> changesQueue;
 
-        public ExternalStateSystem() : base(Aspect.All(new[] { typeof(IExternal) })) { }
+        public ExternalStateSystem() : base(Aspect.All(IExternal.GetAllExterntalComponents())) { }
 
         public override void Initialize(IComponentMapperService mapperService) {
-            this.componentMapper = mapperService.GetMapper<IExternal>();
+            this.positionMapper = mapperService.GetMapper<Position>();
             this.changesQueue = new Queue<ExternalComponentChange>();
         }
 
         public override void Process(GameTime gameTime, int entityId) {
 
-            IExternal component = componentMapper.Get(entityId);
+            Position position = positionMapper.Get(entityId);
 
-            if (component.HasChanged) {
-                this.changesQueue.Enqueue(new ExternalComponentChange(entityId, component));
-                component.HasChanged = false;
+            if (position.HasChanged) {
+                //System.Console.WriteLine("PROCESS CHANGE");
+                this.changesQueue.Enqueue(new ExternalComponentChange(entityId, position));
+                position.HasChanged = false;
             }
         }
 

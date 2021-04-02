@@ -15,7 +15,7 @@ namespace ProjectBoomixCore.Networking {
 
         private readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
-        private GameInstance Game;
+        protected GameInstance Game;
 
         private Dictionary<string, int> clientIDtoEntityID;
 
@@ -70,7 +70,8 @@ namespace ProjectBoomixCore.Networking {
                 }
 
                 // Playing catch-up and updating the game state in a fixed timestep.
-                while (tickLag >= TICKS_PER_FRAME) {
+                //while (tickLag >= TICKS_PER_FRAME) {
+                if (tickLag >= TICKS_PER_FRAME) {
                     this.Game.Update();
                     tickLag -= TICKS_PER_FRAME;
                 }
