@@ -57,18 +57,18 @@ namespace ProjectBoomixCore.Networking {
             stopwatch.Start();
             while (this.IsRunning) {
 
-                // Measure elapsed time.
-                stopwatch.Stop();
-                tickLag += stopwatch.ElapsedTicks;
-
-                stopwatch.Restart();
-
                 // Process user input of last frame.
                 this.PoolClientEvents();
                 while (this.packetsToHandle.Count > 0) {
                     receivedPacket = this.packetsToHandle.Dequeue();
                     receivedPacket.Packet.ApplyPacket(this, receivedPacket.ClientID);
                 }
+
+                // Measure elapsed time.
+                stopwatch.Stop();
+                tickLag += stopwatch.ElapsedTicks;
+
+                stopwatch.Restart();
 
                 // Playing catch-up and updating the game state in a fixed timestep.
                 while (tickLag >= TICKS_PER_FRAME) {

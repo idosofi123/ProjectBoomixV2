@@ -40,6 +40,7 @@ namespace ProjectBoomixCore.Networking.Packets {
                     (IExternal<Position>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
 
                 currentComponent.SyncWithServerComponent((Position)(change.NewComponent));
+                System.Console.WriteLine("PacketApplied " + ((Position)(currentComponent)).X);
             }
         }
 

@@ -15,7 +15,7 @@ namespace ProjectBoomixServer {
 
         private NetManager                  server;
         private Dictionary<string, NetPeer> peers;
-        private Dictionary<int, string> peerIDToClientID;
+        private Dictionary<int, string>     peerIDToClientID;
         private EventBasedNetListener       eventListener;
         private ushort                      port;
 

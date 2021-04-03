@@ -19,7 +19,7 @@ namespace ProjectBoomixCore.Networking.Packets {
 
         public override void ApplyPacket(GameRoomAbstraction host, string clientID) {
             Entity playerEntity = host.GetPlayerEntity(clientID);
-            playerEntity.Get<Velocity>().X = (Direction == MoveDirection.Right) ? 5 : -5;
+            playerEntity.Get<Velocity>().X = (Direction == MoveDirection.Right) ? 3: -3;
         }
 
         public override bool CanBeDropped() {
