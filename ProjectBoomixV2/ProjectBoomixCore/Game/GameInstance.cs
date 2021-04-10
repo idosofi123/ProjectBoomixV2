@@ -7,7 +7,7 @@ namespace ProjectBoomixCore.Game {
 
     public class GameInstance : IUpdateable {
 
-        public static readonly int FPS = 60;
+        public static readonly int FPS = 30;
 
         private World world;
         private ExternalStateSystem externalStateSystem;

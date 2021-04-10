@@ -15,9 +15,6 @@ namespace ProjectBoomixClient.Screening.Screens {
 
         private Texture2D sword;
 
-        private float nigger = 0f;
-        private bool big = false;
-
         public override void Init(ContentManager contentManager) {
             this.sword = contentManager.Load<Texture2D>(AssetsPaths.Sword);
         }
@@ -37,10 +34,7 @@ namespace ProjectBoomixClient.Screening.Screens {
         }
 
         public override void Update(GameTime gameTime) {
-            if (!big)
-                Console.WriteLine("update");
             GameClient.Instance.PollServerEvents();
-            nigger += 75f * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
@@ -53,16 +47,7 @@ namespace ProjectBoomixClient.Screening.Screens {
             GameClient.Instance.PerformOverEntities((Entity entity) => {
                 Position entityPosition = entity.Get<Position>();
                 spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
-                if (entityPosition.X <= 200) {
-                    Console.WriteLine("draw " + entityPosition.X);
-                } else {
-                    big = true;
-                }
             });
-
-            spriteBatch.Draw(sword, new Vector2(nigger, 500), Color.White);
-
-            spriteBatch.Draw(sword, new Vector2(200, 0), Color.White);
 
             spriteBatch.End();
         }
