@@ -7,20 +7,18 @@ namespace ProjectBoomixCore.Game {
 
     public class GameInstance : IUpdateable {
 
-        public static readonly int FPS = 30;
+        public static readonly int FPS = 60;
 
         private World world;
         private ExternalStateSystem externalStateSystem;
 
-        public GameInstance(List<string> players, Dictionary<string, int> playerToEntityID) {
-
+        public GameInstance() {
             this.externalStateSystem = new ExternalStateSystem();
             this.world = new WorldBuilder().AddSystem(new MovementSystem()).AddSystem(this.externalStateSystem).Build();
+        }
 
-            foreach (string player in players) {
-                Entity newEntity = Player.AddPlayerEntity(world);
-                playerToEntityID.Add(player, newEntity.Id);
-            }
+        public Entity AddPlayer() {
+            return Player.AddPlayerEntity(world); ;
         }
 
         public void Update() {

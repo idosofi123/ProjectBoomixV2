@@ -13,7 +13,7 @@ namespace ProjectBoomixCore.Networking {
     /// </summary>
     public abstract class GameRoomAbstraction {
 
-        private static readonly long TICKS_PER_FRAME = 1000 / GameInstance.FPS;
+        private static readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
         protected GameInstance Game;
 
@@ -30,7 +30,11 @@ namespace ProjectBoomixCore.Networking {
             this.packetsToHandle = new Queue<SentClientPacket>();
             this.playersToBeApproved = playerWhitelist;
             this.clientIDtoEntityID = new Dictionary<string, int>();
-            this.Game = new GameInstance(playerWhitelist, this.clientIDtoEntityID);
+
+            this.Game = new GameInstance();
+            foreach (string playerID in this.playersToBeApproved) {
+                this.clientIDtoEntityID[playerID] = this.Game.AddPlayer().Id;
+            }
         }
 
         protected abstract void PoolClientEvents();
@@ -52,14 +56,11 @@ namespace ProjectBoomixCore.Networking {
 
             SentClientPacket receivedPacket;
             Stopwatch stopwatch = new Stopwatch();
-            Stopwatch fpsWatch = new Stopwatch();
-            long tickLag = 0;
-            int fps = 0;
+            long tickCounter = 0, tickRemainder = 0;
 
             stopwatch.Start();
-            fpsWatch.Start();
 
-            while (this.IsRunning) {
+            while (this.IsRunning) { 
 
                 // Process user input of last frame.
                 this.PoolClientEvents();
@@ -68,22 +69,24 @@ namespace ProjectBoomixCore.Networking {
                     receivedPacket.Packet.ApplyPacket(this, receivedPacket.ClientID);
                 }
 
-                // Playing catch-up and updating the game state in a fixed timestep.
-                if (stopwatch.ElapsedMilliseconds >= TICKS_PER_FRAME) {
-                    this.Game.Update();
-                    fps++;
-                    tickLag -= TICKS_PER_FRAME;
-                    stopwatch.Restart();
+                tickCounter = stopwatch.ElapsedTicks;
+                
+                if (tickRemainder > 0) {
+                    tickCounter += tickRemainder;
+                    tickRemainder = 0;
                 }
 
-                // Broadcast new game state and include remaining lag for rendering extrapolation.
-                this.BroadcastNewGameState(tickLag);
+                // Playing catch-up and updating the game state in a fixed timestep.
+                while (tickCounter >= TICKS_PER_FRAME) {
+                    this.Game.Update();
+                    tickCounter -= TICKS_PER_FRAME;
 
-                // temp fps checking
-                if (fpsWatch.ElapsedMilliseconds >= 1000) {
-                    System.Console.WriteLine("FPS: " + fps);
-                    fps = 0;
-                    fpsWatch.Restart();
+                    // Broadcast new game state and include remaining lag for rendering extrapolation.
+                    if (tickCounter < TICKS_PER_FRAME) {
+                        this.BroadcastNewGameState(tickCounter);
+                        tickRemainder = tickCounter;
+                        stopwatch.Restart();
+                    }
                 }
             }
         }

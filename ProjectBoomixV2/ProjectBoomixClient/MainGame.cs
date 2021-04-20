@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectBoomixCore.Game;
 using ProjectBoomixClient.Screening;
 using ProjectBoomixClient.Screening.Screens;
 using ProjectBoomixClient.Network;
@@ -16,6 +17,10 @@ namespace ProjectBoomixClient {
 
         public MainGame() {
 
+            // Frame Rate targeting
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / GameInstance.FPS);
+
             // Graphics and assets
             this.graphics = new GraphicsDeviceManager(this);
             this.Content.RootDirectory = "Content";
@@ -26,7 +31,7 @@ namespace ProjectBoomixClient {
         }
 
         protected override void Initialize() {
-            this.SetScreenSize(1280, 720, false);
+            this.SetScreenSize(1920,1080,true);
             VirtualResolution.InitResolution(this);
             GameClient.Instance.ConnectToServer();
             base.Initialize();

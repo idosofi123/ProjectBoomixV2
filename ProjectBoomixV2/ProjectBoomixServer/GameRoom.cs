@@ -57,20 +57,6 @@ namespace ProjectBoomixServer {
                 Program.Logger.Warn($"Unwanted user attempted to connect, named: {requestCredentials[0]}");
             }
 
-            // * VALIDATE AGAINST WEB SERVER - CURRENTLY IRRELEVANT *
-            //if (this.playersToBeApproved.Contains(requestCredentials[0])) {
-            //    HttpResponseMessage isValidResponse = await ValidateConnectionAttempt(requestCredentials[0], requestCredentials[1]);
-            //    if (isValidResponse.StatusCode == HttpStatusCode.OK) {
-            //        request.Accept();
-            //        playersToBeApproved.Remove(requestCredentials[0]);
-            //        if (playersToBeApproved.Count == 0) {
-            //            this.EndMatchmakingAndStartGame();
-            //        }
-            //    } else {
-            //        request.Reject();
-            //    }
-            //}
-
         }
 
         private void HandleNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod) {
