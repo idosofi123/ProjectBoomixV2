@@ -12,6 +12,8 @@ namespace ProjectBoomixCore.Game.Commands {
         [ProtoMember(1)]
         public MoveDirection Direction { get; set; }
 
+        public MoveCommand() { }
+
         public MoveCommand(MoveDirection direction) {
             Direction = direction;
         }

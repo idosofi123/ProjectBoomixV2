@@ -59,7 +59,7 @@ namespace ProjectBoomixClient.Screening.Screens {
                 // Apply command locally (client-side prediction), and send it to the server.
                 command.ApplyCommand(this.game, GameClient.Instance.ID);
                 GameCommandPacket packet = new GameCommandPacket(command, gameCommandPacketSequencer++);
-                //GameClient.Instance.SendPacketToServer(packet);
+                GameClient.Instance.SendPacketToServer(packet);
             }
         }
 

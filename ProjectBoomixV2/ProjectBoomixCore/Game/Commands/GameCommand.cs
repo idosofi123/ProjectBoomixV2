@@ -1,7 +1,5 @@
 ﻿using ProtoBuf;
 using MonoGame.Extended.Entities;
-using ProjectBoomixCore.Game;
-using ProjectBoomixCore.Game.Components;
 
 namespace ProjectBoomixCore.Game.Commands {
 

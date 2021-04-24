@@ -12,6 +12,8 @@ namespace ProjectBoomixCore.Networking.Packets {
         [ProtoMember(2)]
         public readonly GameCommand command;
 
+        public GameCommandPacket() { }
+
         public GameCommandPacket(GameCommand gameCommand, int id) {
             this.command = gameCommand;
             this.ID = id;
