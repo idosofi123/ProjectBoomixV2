@@ -4,7 +4,7 @@ using ProjectBoomixCore.Game.Components;
 namespace ProjectBoomixCore.Game {
 
     [ProtoContract]
-    public class ExternalComponentChange {
+    public class ComponentChange {
 
         [ProtoMember(1)]
         public readonly int EntityID;
@@ -12,9 +12,9 @@ namespace ProjectBoomixCore.Game {
         [ProtoMember(2)]
         public readonly Component NewComponent;
 
-        public ExternalComponentChange() { }
+        public ComponentChange() { }
 
-        public ExternalComponentChange(int entityID, Component newComponent) {
+        public ComponentChange(int entityID, Component newComponent) {
             this.EntityID = entityID;
             this.NewComponent = newComponent;
         }

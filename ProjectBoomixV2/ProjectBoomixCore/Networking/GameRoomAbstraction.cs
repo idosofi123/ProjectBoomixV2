@@ -15,7 +15,7 @@ namespace ProjectBoomixCore.Networking {
 
         private static readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
-        protected GameInstance Game;
+        public GameInstance Game;
 
         private Dictionary<string, int> clientIDtoEntityID;
 
@@ -33,7 +33,7 @@ namespace ProjectBoomixCore.Networking {
 
             this.Game = new GameInstance();
             foreach (string playerID in this.playersToBeApproved) {
-                this.clientIDtoEntityID[playerID] = this.Game.AddPlayer().Id;
+                this.clientIDtoEntityID[playerID] = this.Game.AddPlayer(playerID).Id;
             }
         }
 
@@ -81,7 +81,7 @@ namespace ProjectBoomixCore.Networking {
                     this.Game.Update();
                     tickCounter -= TICKS_PER_FRAME;
 
-                    // Broadcast new game state and include remaining lag for rendering extrapolation.
+                    // Broadcast new game state and include remaining lag for potential rendering extrapolation.
                     if (tickCounter < TICKS_PER_FRAME) {
                         this.BroadcastNewGameState(tickCounter);
                         tickRemainder = tickCounter;
@@ -89,11 +89,6 @@ namespace ProjectBoomixCore.Networking {
                     }
                 }
             }
-        }
-
-        // API exposed to incoming packets -
-        public Entity GetPlayerEntity(string clientID) {
-            return Game.GetEntity(this.clientIDtoEntityID[clientID]);
         }
     }
 }

@@ -8,6 +8,9 @@ namespace ProjectBoomixCore.Game.Systems {
 
     public sealed class MovementSystem : EntityProcessingSystem {
 
+        private const float MOVEMENT_EASE = 0.9f;
+        private const float MOVEMENT_FLOOR = 0.1f;
+
         private ComponentMapper<Position> positionMapper;
         private ComponentMapper<Velocity> velocityMapper;
 
@@ -28,13 +31,18 @@ namespace ProjectBoomixCore.Game.Systems {
                 entityPosition.X += entityVelocity.X;
                 entityPosition.Y += entityVelocity.Y;
 
-                entityPosition.HasChanged = true;
+                entityVelocity.X *= MOVEMENT_EASE;
+                if (Math.Abs(entityVelocity.X) <= MOVEMENT_FLOOR) {
+                    entityVelocity.X = 0;
+                }
 
-                //entityVelocity.X *= 0.9f;
-                //if (Math.Abs(entityVelocity.X) <= 0.1) {
-                //    entityVelocity.X = 0;
-                //}
-                entityVelocity.X = 0;
+                entityVelocity.Y *= MOVEMENT_EASE;
+                if (Math.Abs(entityVelocity.Y) <= MOVEMENT_FLOOR) {
+                    entityVelocity.Y = 0;
+                }
+
+                entityPosition.HasChanged = true;
+                entityVelocity.HasChanged = true;
             }
         }
     }

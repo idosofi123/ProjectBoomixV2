@@ -11,26 +11,28 @@ namespace ProjectBoomixCore.Game {
 
         private World world;
         private ExternalStateSystem externalStateSystem;
+        private Dictionary<string, int> playerIDToEntityID;
 
         public GameInstance() {
             this.externalStateSystem = new ExternalStateSystem();
             this.world = new WorldBuilder().AddSystem(new MovementSystem()).AddSystem(this.externalStateSystem).Build();
+            this.playerIDToEntityID = new Dictionary<string, int>();
         }
 
-        public Entity AddPlayer() {
-            return Player.AddPlayerEntity(world); ;
+        public Entity AddPlayer(string playerID) {
+            return Player.AddPlayerEntity(world);
         }
 
         public void Update() {
             this.world.Update(null);
         }
 
-        public ExternalComponentChange[] GetExternalChanges() {
+        public ComponentChange[] GetChangesSnapshot() {
             return this.externalStateSystem.GetAndClearAllChanges();
         }
 
-        public Entity GetEntity(int id) {
-            return world.GetEntity(id);
+        public Entity GetEntity(string playerID) {
+            return world.GetEntity(this.playerIDToEntityID[playerID]);
         }
     }
 }

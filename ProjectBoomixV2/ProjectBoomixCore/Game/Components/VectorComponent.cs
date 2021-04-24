@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using Microsoft.Xna.Framework;
 
 namespace ProjectBoomixCore.Game.Components {
 
@@ -18,5 +19,10 @@ namespace ProjectBoomixCore.Game.Components {
         }
 
         public VectorComponent() : this(0, 0) { }
-    }
+
+        public void SetFromVector(Vector2 vector) {
+            this.X = vector.X;
+            this.Y = vector.Y;
+        }
+    } 
 }
