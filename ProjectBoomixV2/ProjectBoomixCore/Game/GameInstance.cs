@@ -29,21 +29,29 @@ namespace ProjectBoomixCore.Game {
             this.playerIDToEntityID = new Dictionary<string, int>();
         }
 
-        public Entity AddPlayer(string playerID) {
-            return Player.AddPlayerEntity(world);
+        public void AddPlayer(string playerID, float x = 0, float y = 0) {
+            this.playerIDToEntityID[playerID] = Player.AddPlayerEntity(world, x, y).Id;
         }
 
         public void Update() {
             this.world.Update(null);
         }
 
-        public Entity GetEntity(string playerID) {
+        public Entity GetPlayerEntity(string playerID) {
             return world.GetEntity(this.playerIDToEntityID[playerID]);
         }
 
         public T GetSystem<T>() where T : EntitySystem {
             T temp = default;
             return (T)systems[temp.GetType()];
+        }
+
+        public delegate void EntityAction(Entity entity);
+
+        public void PerformOverEntities(EntityAction action) {
+            foreach (int id in playerIDToEntityID.Values) {
+                action(this.world.GetEntity(id));
+            }
         }
     }
 }

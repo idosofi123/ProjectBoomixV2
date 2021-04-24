@@ -10,7 +10,7 @@ namespace ProjectBoomixCore.Game.Commands {
     public abstract class GameCommand {
 
         public void ApplyCommand(GameInstance game, string playerID) {
-            ApplyCommand(game.GetEntity(playerID));
+            ApplyCommand(game.GetPlayerEntity(playerID));
         }
 
         protected abstract void ApplyCommand(Entity playerEntity);

@@ -28,18 +28,18 @@ namespace ProjectBoomixCore.Networking.Packets {
 
             foreach (ComponentChange change in Changes) {
 
-                Entity entity;
-                try {
-                    entity = client.GetEntity(change.EntityID);
-                } catch (KeyNotFoundException e) {
-                    entity = client.AddNewEntity(change.EntityID);
-                    entity.GetType().GetMethod("Attach").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, new[] { change.NewComponent });
-                }
+                //Entity entity;
+                //try {
+                //    entity = client.GetEntity(change.EntityID);
+                //} catch (KeyNotFoundException e) {
+                //    entity = client.AddNewEntity(change.EntityID);
+                //    entity.GetType().GetMethod("Attach").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, new[] { change.NewComponent });
+                //}
 
-                IExternal<Position> currentComponent =
-                    (IExternal<Position>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
+                //IExternal<Position> currentComponent =
+                //    (IExternal<Position>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
 
-                currentComponent.SyncWithServerComponent((Position)(change.NewComponent));
+                //currentComponent.SyncWithServerComponent((Position)(change.NewComponent));
             }
         }
 

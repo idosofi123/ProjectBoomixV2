@@ -31,7 +31,7 @@ namespace ProjectBoomixClient {
         }
 
         protected override void Initialize() {
-            this.SetScreenSize(1280, 720, false);
+            this.SetScreenSize(1920, 1080, true);
             VirtualResolution.InitResolution(this);
             GameClient.Instance.ConnectToServer();
             base.Initialize();

@@ -16,7 +16,7 @@ namespace ProjectBoomixCore.Game {
             {  MoveDirection.Right, new Vector2(1, 0) },
             {  MoveDirection.Left, new Vector2(-1, 0) },
             {  MoveDirection.Up, new Vector2(0, -1) },
-            {  MoveDirection.Right, new Vector2(0, 1) }
+            {  MoveDirection.Down, new Vector2(0, 1) }
         };
     }
 }

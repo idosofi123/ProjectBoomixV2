@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Game.Commands;
+using ProjectBoomixCore.Game.Components;
 using ProjectBoomixCore.Networking.Packets;
 using ProjectBoomixClient.Network;
 
@@ -13,13 +15,15 @@ namespace ProjectBoomixClient.Screening.Screens {
     public sealed class InGameScreen : Screen {
 
         // Logical members
-        private GameInstance game;
+        private ClientGameInstance game;
         private int gameCommandPacketSequencer;
 
         // UI-related members
         private Texture2D sword;
 
         public override void Init(ContentManager contentManager) {
+            this.game = new ClientGameInstance();
+            this.game.AddPlayer(GameClient.Instance.ID, 100, 100);
             this.gameCommandPacketSequencer = 0;
             this.sword = contentManager.Load<Texture2D>(AssetsPaths.Sword);
         }
@@ -34,7 +38,7 @@ namespace ProjectBoomixClient.Screening.Screens {
 
                 MoveDirection direction = MoveDirection.Right;
                 long minPressDuration = inputState.GetPressDuration(Keys.Right);
-
+                minPressDuration = (minPressDuration == 0) ? long.MaxValue : minPressDuration;
 
                 // Determine movement direction.
                 if (inputState.GetPressDuration(Keys.Left) < minPressDuration && inputState.GetPressDuration(Keys.Left) > 0) {
@@ -55,12 +59,13 @@ namespace ProjectBoomixClient.Screening.Screens {
                 // Apply command locally (client-side prediction), and send it to the server.
                 command.ApplyCommand(this.game, GameClient.Instance.ID);
                 GameCommandPacket packet = new GameCommandPacket(command, gameCommandPacketSequencer++);
-                GameClient.Instance.SendPacketToServer(packet);
+                //GameClient.Instance.SendPacketToServer(packet);
             }
         }
 
         public override void Update(GameTime gameTime) {
             GameClient.Instance.PollServerEvents();
+            this.game.Update();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
@@ -70,10 +75,10 @@ namespace ProjectBoomixClient.Screening.Screens {
             spriteBatch.DrawString(GlobalResources.RegularFont, $"FPS: {(int)Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(1740, 30), Color.LightGreen);
 
             // Draw game world.
-            //GameClient.Instance.PerformOverEntities((Entity entity) => {
-            //    Position entityPosition = entity.Get<Position>();
-            //    spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
-            //});
+            game.PerformOverEntities((Entity entity) => {
+                Position entityPosition = entity.Get<Position>();
+                spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
+            });
 
             spriteBatch.End();
         }
