@@ -12,6 +12,10 @@ namespace ProjectBoomixCore.Game.Commands {
         [ProtoMember(1)]
         public MoveDirection Direction { get; set; }
 
+        public MoveCommand(MoveDirection direction) {
+            Direction = direction;
+        }
+
         protected override void ApplyCommand(Entity playerEntity) {
             playerEntity.Get<Velocity>().SetFromVector(DirectionUtil.Directions[this.Direction] * MOVEMENT_SPEED);
         }

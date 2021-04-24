@@ -10,23 +10,23 @@ namespace ProjectBoomixCore.Networking.Packets {
     public class GameStatePacket : ServerPacket {
 
         [ProtoMember(1)]
-        public ExternalComponentChange[] Changes { get; set; }
+        public ComponentChange[] Changes { get; set; }
 
         [ProtoMember(2)]
         public float UpdateTickLag { get; set; }
 
         public GameStatePacket() {
-            Changes = new ExternalComponentChange[0];
+            Changes = new ComponentChange[0];
         }
 
-        public GameStatePacket(ExternalComponentChange[] changes, float updateTickLag) {
+        public GameStatePacket(ComponentChange[] changes, float updateTickLag) {
             this.Changes = changes;
             this.UpdateTickLag = updateTickLag;
         }
 
         public override void ApplyPacket(GameClientAbstraction client) {
 
-            foreach (ExternalComponentChange change in Changes) {
+            foreach (ComponentChange change in Changes) {
 
                 Entity entity;
                 try {

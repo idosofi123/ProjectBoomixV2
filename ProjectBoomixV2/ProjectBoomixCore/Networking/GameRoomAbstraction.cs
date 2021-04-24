@@ -15,7 +15,7 @@ namespace ProjectBoomixCore.Networking {
 
         private static readonly long TICKS_PER_FRAME = Stopwatch.Frequency / GameInstance.FPS;
 
-        public GameInstance Game;
+        public ServerGameInstance Game;
 
         private Dictionary<string, int> clientIDtoEntityID;
 
@@ -31,7 +31,7 @@ namespace ProjectBoomixCore.Networking {
             this.playersToBeApproved = playerWhitelist;
             this.clientIDtoEntityID = new Dictionary<string, int>();
 
-            this.Game = new GameInstance();
+            this.Game = new ServerGameInstance();
             foreach (string playerID in this.playersToBeApproved) {
                 this.clientIDtoEntityID[playerID] = this.Game.AddPlayer(playerID).Id;
             }

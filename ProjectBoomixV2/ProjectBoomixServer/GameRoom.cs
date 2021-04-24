@@ -32,8 +32,7 @@ namespace ProjectBoomixServer {
             this.peerIDToClientID = new Dictionary<int, string>();
         }
 
-        // LiteNetLib Event Handling ~
-
+        // LiteNetLib Event
         private async void HandleConnectionRequest(ConnectionRequest request) {
 
             Program.Logger.Info($"New connection request from: {request.RemoteEndPoint.Address}");
@@ -59,6 +58,7 @@ namespace ProjectBoomixServer {
 
         }
 
+        // LiteNetLib Event
         private void HandleNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod) {
 
             try {
@@ -71,8 +71,6 @@ namespace ProjectBoomixServer {
                 Program.Logger.Error($"Garbage packet received from peer: {peer.Id}");
             }
         }
-
-        // ~
 
         private void EndMatchmakingAndStartGame() {
             GameStartedPacket packet = new GameStartedPacket();
@@ -99,7 +97,7 @@ namespace ProjectBoomixServer {
         }
 
         protected override void BroadcastNewGameState(float updateTickLag) {
-            ExternalComponentChange[] changes = base.Game.GetExternalChanges();
+            ComponentChange[] changes = base.Game.GetChangesSnapshot();
             if (changes.Length > 0) {
                 this.SendPacketToClients(new GameStatePacket(changes, updateTickLag));
             }

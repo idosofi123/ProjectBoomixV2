@@ -18,6 +18,7 @@ namespace ProjectBoomixServer {
         }
 
         public void Start() {
+
             // TODO: Main server loop - creates game rooms for users to connect to and such, communicate with rest API server
 
             // Temporarily - add a single game room for the testing

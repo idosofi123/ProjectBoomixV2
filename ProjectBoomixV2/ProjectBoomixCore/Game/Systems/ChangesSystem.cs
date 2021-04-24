@@ -6,12 +6,12 @@ using ProjectBoomixCore.Game.Components;
 
 namespace ProjectBoomixCore.Game.Systems {
 
-    public sealed class ExternalStateSystem : EntityProcessingSystem {
+    public sealed class ChangesSystem : EntityProcessingSystem {
 
         private ComponentMapper<Position> positionMapper;
         private Queue<ComponentChange> changesQueue;
 
-        public ExternalStateSystem() : base(Aspect.All()) { }
+        public ChangesSystem() : base(Aspect.All()) { }
 
         public override void Initialize(IComponentMapperService mapperService) {
             this.positionMapper = mapperService.GetMapper<Position>();

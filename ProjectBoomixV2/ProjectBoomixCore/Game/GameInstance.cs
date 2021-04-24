@@ -1,21 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MonoGame.Extended.Entities;
-using ProjectBoomixCore.Game.Systems;
+using MonoGame.Extended.Entities.Systems;
 using ProjectBoomixCore.Game.Prefabs;
 
 namespace ProjectBoomixCore.Game {
 
-    public class GameInstance : IUpdateable {
+    public abstract class GameInstance : IUpdateable {
 
         public static readonly int FPS = 60;
 
-        private World world;
-        private ExternalStateSystem externalStateSystem;
+        protected World world;
+        private Dictionary<Type, EntitySystem> systems;
         private Dictionary<string, int> playerIDToEntityID;
 
-        public GameInstance() {
-            this.externalStateSystem = new ExternalStateSystem();
-            this.world = new WorldBuilder().AddSystem(new MovementSystem()).AddSystem(this.externalStateSystem).Build();
+        public GameInstance(EntitySystem[] gameSystems) {
+
+            this.systems = new Dictionary<Type, EntitySystem>();
+
+            WorldBuilder builder = new WorldBuilder();
+            foreach (EntityUpdateSystem system in gameSystems) {
+                this.systems[system.GetType()] = system;
+                builder.AddSystem(system);
+            }
+
+            this.world = builder.Build();
+
             this.playerIDToEntityID = new Dictionary<string, int>();
         }
 
@@ -27,12 +37,13 @@ namespace ProjectBoomixCore.Game {
             this.world.Update(null);
         }
 
-        public ComponentChange[] GetChangesSnapshot() {
-            return this.externalStateSystem.GetAndClearAllChanges();
-        }
-
         public Entity GetEntity(string playerID) {
             return world.GetEntity(this.playerIDToEntityID[playerID]);
+        }
+
+        public T GetSystem<T>() where T : EntitySystem {
+            T temp = default;
+            return (T)systems[temp.GetType()];
         }
     }
 }

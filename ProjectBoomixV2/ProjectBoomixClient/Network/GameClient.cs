@@ -10,6 +10,8 @@ namespace ProjectBoomixClient.Network {
 
         public static GameClient Instance { get; } = new GameClient();
 
+        public readonly string ID;
+
         private NetManager            client;
         private EventBasedNetListener eventListener;
         private NetPeer               server;
@@ -18,6 +20,7 @@ namespace ProjectBoomixClient.Network {
             this.eventListener = new EventBasedNetListener();
             this.eventListener.NetworkReceiveEvent += this.HandleNetworkReceive;
             this.client = new NetManager(this.eventListener);
+            this.ID = Program.LaunchArgs.Username;
         }
 
         public void ConnectToServer() {

@@ -3,33 +3,59 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
-using ProjectBoomixCore.Game.Components;
-using ProjectBoomixClient.Network;
+using ProjectBoomixCore.Game.Commands;
 using ProjectBoomixCore.Networking.Packets;
+using ProjectBoomixClient.Network;
 
 namespace ProjectBoomixClient.Screening.Screens {
 
     public sealed class InGameScreen : Screen {
 
+        // Logical members
+        private GameInstance game;
+        private int gameCommandPacketSequencer;
+
+        // UI-related members
         private Texture2D sword;
 
         public override void Init(ContentManager contentManager) {
+            this.gameCommandPacketSequencer = 0;
             this.sword = contentManager.Load<Texture2D>(AssetsPaths.Sword);
         }
 
         public override void HandleInput(InputState inputState) {
 
             // Movement handling
-            if (inputState.isKeyDown(Keys.Right) || inputState.isKeyDown(Keys.Left)) {
-                MoveDirection direction;
-                if (inputState.isKeyDown(Keys.Right) && inputState.isKeyDown(Keys.Left)) {
-                    direction = inputState.GetPressDuration(Keys.Right) < inputState.GetPressDuration(Keys.Left) ? MoveDirection.Right : MoveDirection.Left;
-                } else {
-                    direction = inputState.isKeyDown(Keys.Right) ? MoveDirection.Right : MoveDirection.Left;
+            if (inputState.isKeyDown(Keys.Right)
+             || inputState.isKeyDown(Keys.Left)
+             || inputState.isKeyDown(Keys.Up)
+             || inputState.isKeyDown(Keys.Down)) {
+
+                MoveDirection direction = MoveDirection.Right;
+                long minPressDuration = inputState.GetPressDuration(Keys.Right);
+
+
+                // Determine movement direction.
+                if (inputState.GetPressDuration(Keys.Left) < minPressDuration && inputState.GetPressDuration(Keys.Left) > 0) {
+                    direction = MoveDirection.Left;
+                    minPressDuration = inputState.GetPressDuration(Keys.Left);
+
+                } else if (inputState.GetPressDuration(Keys.Up) < minPressDuration && inputState.GetPressDuration(Keys.Up) > 0) {
+                    direction = MoveDirection.Up;
+                    minPressDuration = inputState.GetPressDuration(Keys.Up);
+
+                } else if (inputState.GetPressDuration(Keys.Down) < minPressDuration && inputState.GetPressDuration(Keys.Down) > 0) {
+                    direction = MoveDirection.Down;
+                    minPressDuration = inputState.GetPressDuration(Keys.Down);
                 }
-                GameClient.Instance.SendPacketToServer(new MovePacket(direction));
+
+                MoveCommand command = new MoveCommand(direction);
+
+                // Apply command locally (client-side prediction), and send it to the server.
+                command.ApplyCommand(this.game, GameClient.Instance.ID);
+                GameCommandPacket packet = new GameCommandPacket(command, gameCommandPacketSequencer++);
+                GameClient.Instance.SendPacketToServer(packet);
             }
         }
 
@@ -44,10 +70,10 @@ namespace ProjectBoomixClient.Screening.Screens {
             spriteBatch.DrawString(GlobalResources.RegularFont, $"FPS: {(int)Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(1740, 30), Color.LightGreen);
 
             // Draw game world.
-            GameClient.Instance.PerformOverEntities((Entity entity) => {
-                Position entityPosition = entity.Get<Position>();
-                spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
-            });
+            //GameClient.Instance.PerformOverEntities((Entity entity) => {
+            //    Position entityPosition = entity.Get<Position>();
+            //    spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
+            //});
 
             spriteBatch.End();
         }
