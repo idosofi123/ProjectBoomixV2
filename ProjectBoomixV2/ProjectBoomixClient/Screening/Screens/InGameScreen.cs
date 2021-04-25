@@ -14,17 +14,9 @@ namespace ProjectBoomixClient.Screening.Screens {
 
     public sealed class InGameScreen : Screen {
 
-        // Logical members
-        private ClientGameInstance game;
-        private int gameCommandPacketSequencer;
-
-        // UI-related members
         private Texture2D sword;
 
         public override void Init(ContentManager contentManager) {
-            this.game = new ClientGameInstance();
-            this.game.AddPlayer(GameClient.Instance.ID, 100, 100);
-            this.gameCommandPacketSequencer = 0;
             this.sword = contentManager.Load<Texture2D>(AssetsPaths.Sword);
         }
 
@@ -57,15 +49,14 @@ namespace ProjectBoomixClient.Screening.Screens {
                 MoveCommand command = new MoveCommand(direction);
 
                 // Apply command locally (client-side prediction), and send it to the server.
-                command.ApplyCommand(this.game, GameClient.Instance.ID);
-                GameCommandPacket packet = new GameCommandPacket(command, gameCommandPacketSequencer++);
-                GameClient.Instance.SendPacketToServer(packet);
+                command.ApplyCommand(GameClient.Instance.Game, GameClient.Instance.ID);
+                GameClient.Instance.SendGameCommandToServer(command);
             }
         }
 
         public override void Update(GameTime gameTime) {
             GameClient.Instance.PollServerEvents();
-            this.game.Update();
+            GameClient.Instance.Game.Update();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
@@ -75,7 +66,7 @@ namespace ProjectBoomixClient.Screening.Screens {
             spriteBatch.DrawString(GlobalResources.RegularFont, $"FPS: {(int)Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(1740, 30), Color.LightGreen);
 
             // Draw game world.
-            game.PerformOverEntities((Entity entity) => {
+            GameClient.Instance.Game.PerformOverEntities((Entity entity) => {
                 Position entityPosition = entity.Get<Position>();
                 spriteBatch.Draw(sword, new Vector2(entityPosition.X, entityPosition.Y), Color.White);
             });
