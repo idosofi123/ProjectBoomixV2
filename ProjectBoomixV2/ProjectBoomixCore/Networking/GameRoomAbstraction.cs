@@ -83,7 +83,7 @@ namespace ProjectBoomixCore.Networking {
 
                     // Broadcast new game state and include remaining lag for potential rendering extrapolation.
                     if (tickCounter < TICKS_PER_FRAME) {
-                        //this.BroadcastNewGameState(tickCounter);
+                        this.BroadcastNewGameState(tickCounter);
                         tickRemainder = tickCounter;
                         stopwatch.Restart();
                     }

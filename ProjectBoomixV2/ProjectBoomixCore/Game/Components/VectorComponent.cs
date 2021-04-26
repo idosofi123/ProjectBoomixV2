@@ -24,5 +24,9 @@ namespace ProjectBoomixCore.Game.Components {
             this.X = vector.X;
             this.Y = vector.Y;
         }
+
+        public override bool Equals(object obj) {
+            return obj is VectorComponent && ((VectorComponent)obj).X == this.X && ((VectorComponent)obj).Y == this.Y;
+        }
     } 
 }

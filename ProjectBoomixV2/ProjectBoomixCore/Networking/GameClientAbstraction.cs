@@ -10,13 +10,11 @@ namespace ProjectBoomixCore.Networking {
         public readonly ClientGameInstance Game;
         public string ID { get; protected set; }
 
-        private readonly Dictionary<int, int> serverToClientEntityID;
         private int gameCommandPacketSequencer;
 
         public GameClientAbstraction() {
             this.Game = new ClientGameInstance();
             this.Game.AddPlayer(this.ID, 100, 100); // temp
-            this.serverToClientEntityID = new Dictionary<int, int>();
             this.gameCommandPacketSequencer = 0;
         }
 
