@@ -6,7 +6,7 @@ namespace ProjectBoomixCore.Game.Components {
 
         public DateTime Timestamp { get; set; }
 
-        public FuturePosition(DateTime timestamp) {
+        public FuturePosition(float x, float y, DateTime timestamp) : base(x, y) {
             this.Timestamp = timestamp;
         }
     }

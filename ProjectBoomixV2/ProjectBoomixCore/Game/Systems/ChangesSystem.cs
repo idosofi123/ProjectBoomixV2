@@ -23,7 +23,7 @@ namespace ProjectBoomixCore.Game.Systems {
             Position position = positionMapper.Get(entityId);
 
             if (position.HasChanged) {
-                this.changesQueue.Enqueue(new ComponentChange(entityId, position));
+                this.changesQueue.Enqueue(new ComponentChange { EntityID = entityId, NewComponent = position });
                 position.HasChanged = false;
             }
         }

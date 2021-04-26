@@ -11,8 +11,10 @@ namespace ProjectBoomixCore.Game {
         public static readonly int FPS = 60;
 
         protected World world;
+        protected Dictionary<string, int> playerIDToEntityID;
+        protected Dictionary<int, string> entityIDToPlayerID;
+
         private Dictionary<Type, EntitySystem> systems;
-        private Dictionary<string, int> playerIDToEntityID;
 
         public GameInstance(EntitySystem[] gameSystems) {
 
@@ -27,10 +29,14 @@ namespace ProjectBoomixCore.Game {
             this.world = builder.Build();
 
             this.playerIDToEntityID = new Dictionary<string, int>();
+            this.entityIDToPlayerID = new Dictionary<int, string>();
         }
 
-        public void AddPlayer(string playerID, float x = 0, float y = 0) {
-            this.playerIDToEntityID[playerID] = Player.AddPlayerEntity(world, x, y).Id;
+        public Entity AddPlayer(string playerID, float x = 0, float y = 0) {
+            Entity newEntity = Player.AddPlayerEntity(world, x, y);
+            this.playerIDToEntityID[playerID] = newEntity.Id;
+            this.entityIDToPlayerID[newEntity.Id] = playerID;
+            return newEntity;
         }
 
         public void Update() {
@@ -38,12 +44,15 @@ namespace ProjectBoomixCore.Game {
         }
 
         public Entity GetPlayerEntity(string playerID) {
-            return world.GetEntity(this.playerIDToEntityID[playerID]);
+            try {
+                return world.GetEntity(this.playerIDToEntityID[playerID]);
+            } catch (KeyNotFoundException ex) {
+                throw ex;
+            }
         }
 
         public T GetSystem<T>() where T : EntitySystem {
-            T temp = default;
-            return (T)systems[temp.GetType()];
+            return (T)systems[typeof(T)];
         }
 
         public delegate void EntityAction(Entity entity);

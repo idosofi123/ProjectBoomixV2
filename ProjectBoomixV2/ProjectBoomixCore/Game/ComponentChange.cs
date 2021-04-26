@@ -1,22 +1,23 @@
-﻿using ProtoBuf;
+﻿
+using ProtoBuf;
 using ProjectBoomixCore.Game.Components;
 
 namespace ProjectBoomixCore.Game {
 
+    public struct ComponentChange {
+
+        public int EntityID { get; set; }
+
+        public Component NewComponent { get; set; }
+    }
+
     [ProtoContract]
-    public class ComponentChange {
+    public struct ExternalComponentChange {
 
         [ProtoMember(1)]
-        public readonly int EntityID;
+        public string PlayerID { get; set; }
 
         [ProtoMember(2)]
-        public readonly Component NewComponent;
-
-        public ComponentChange() { }
-
-        public ComponentChange(int entityID, Component newComponent) {
-            this.EntityID = entityID;
-            this.NewComponent = newComponent;
-        }
+        public Component NewComponent { get; set; }
     }
 }

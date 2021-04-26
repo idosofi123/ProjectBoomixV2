@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Entities.Systems;
+﻿using System.Linq;
+using MonoGame.Extended.Entities.Systems;
 using ProjectBoomixCore.Game.Systems;
 
 namespace ProjectBoomixCore.Game {
@@ -7,8 +8,14 @@ namespace ProjectBoomixCore.Game {
 
         public ServerGameInstance() : base(new EntityUpdateSystem[] { new MovementSystem(), new ChangesSystem() }) { }
 
-        public ComponentChange[] GetChangesSnapshot() {
-            return base.GetSystem<ChangesSystem>().GetAndClearAllChanges();
+        public ExternalComponentChange[] GetChangesSnapshot() {
+
+            return base.GetSystem<ChangesSystem>().GetAndClearAllChanges().Select(
+                change => new ExternalComponentChange {
+                    PlayerID     = base.entityIDToPlayerID[change.EntityID],
+                    NewComponent = change.NewComponent
+                }
+            ).ToArray();
         }
     }
 }

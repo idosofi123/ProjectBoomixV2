@@ -12,9 +12,9 @@ namespace ProjectBoomixCore.Networking {
 
         private int gameCommandPacketSequencer;
 
-        public GameClientAbstraction() {
-            this.Game = new ClientGameInstance();
-            this.Game.AddPlayer(this.ID, 100, 100); // temp
+        public GameClientAbstraction(string playerID) {
+            this.ID = playerID;
+            this.Game = new ClientGameInstance(ID);
             this.gameCommandPacketSequencer = 0;
         }
 

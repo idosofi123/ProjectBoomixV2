@@ -1,4 +1,5 @@
-﻿using ProtoBuf;
+﻿using System;
+using ProtoBuf;
 using System.Collections.Generic;
 using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
@@ -10,36 +11,37 @@ namespace ProjectBoomixCore.Networking.Packets {
     public class GameStatePacket : ServerPacket {
 
         [ProtoMember(1)]
-        public ComponentChange[] Changes { get; set; }
+        public ExternalComponentChange[] Changes { get; set; }
 
         [ProtoMember(2)]
         public float UpdateTickLag { get; set; }
 
         public GameStatePacket() {
-            Changes = new ComponentChange[0];
+            Changes = new ExternalComponentChange[0];
         }
 
-        public GameStatePacket(ComponentChange[] changes, float updateTickLag) {
+        public GameStatePacket(ExternalComponentChange[] changes, float updateTickLag) {
             this.Changes = changes;
             this.UpdateTickLag = updateTickLag;
         }
 
         public override void ApplyPacket(GameClientAbstraction client) {
+            
+            // TODO: Currently assuming all new packets are Position packets, need to handle other types too in the future.
 
-            foreach (ComponentChange change in Changes) {
+            foreach (ExternalComponentChange change in Changes) {
 
                 Entity entity;
+
                 try {
-                    entity = client.GetEntity(change.EntityID);
+                    entity = client.Game.GetPlayerEntity(change.PlayerID);
                 } catch (KeyNotFoundException e) {
-                    entity = client.AddNewEntity(change.EntityID);
-                    entity.GetType().GetMethod("Attach").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, new[] { change.NewComponent });
+                    entity = client.Game.AddPlayer(change.PlayerID);
+                    entity.Attach(change.NewComponent);
+                    entity.Attach(new PositionTimestamp(DateTime.Now));
                 }
-
-                IExternal<Position> currentComponent =
-                    (IExternal<Position>)entity.GetType().GetMethod("Get").MakeGenericMethod(change.NewComponent.GetType()).Invoke(entity, null);
-
-                currentComponent.SyncWithServerComponent((Position)(change.NewComponent));
+                Position newPosition = (Position)(change.NewComponent);
+                entity.Attach(new FuturePosition(newPosition.X, newPosition.Y, DateTime.Now));
             }
         }
 

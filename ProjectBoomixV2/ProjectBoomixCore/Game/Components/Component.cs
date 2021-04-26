@@ -3,7 +3,7 @@
 namespace ProjectBoomixCore.Game.Components {
 
     [ProtoContract]
-    [ProtoInclude(1, typeof(VectorComponent))]
+    [ProtoInclude(3, typeof(VectorComponent))]
     public abstract class Component {
 
         [ProtoMember(1)]

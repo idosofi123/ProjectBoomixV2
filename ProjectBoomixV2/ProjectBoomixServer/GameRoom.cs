@@ -97,7 +97,7 @@ namespace ProjectBoomixServer {
         }
 
         protected override void BroadcastNewGameState(float updateTickLag) {
-            ComponentChange[] changes = base.Game.GetChangesSnapshot();
+            ExternalComponentChange[] changes = base.Game.GetChangesSnapshot();
             if (changes.Length > 0) {
                 this.SendPacketToClients(new GameStatePacket(changes, updateTickLag));
             }

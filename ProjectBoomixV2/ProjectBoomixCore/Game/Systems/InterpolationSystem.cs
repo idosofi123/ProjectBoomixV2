@@ -10,6 +10,7 @@ namespace ProjectBoomixCore.Game.Systems {
 
     public class InterpolationSystem : EntityProcessingSystem {
 
+        public int LocalPlayerEntityID { get; set; }
         private ComponentMapper<Position> positionMapper;
         private ComponentMapper<PositionTimestamp> positionTsMapper;
         private ComponentMapper<FuturePosition> futurePositionMapper;
@@ -24,23 +25,26 @@ namespace ProjectBoomixCore.Game.Systems {
 
         public override void Process(GameTime gameTime, int entityId) {
 
-            Position currentPosition = positionMapper.Get(entityId);
-            PositionTimestamp currentPosTs = positionTsMapper.Get(entityId);
-            FuturePosition futurePosition = futurePositionMapper.Get(entityId);
+            if (entityId != this.LocalPlayerEntityID) {
 
-            DateTime renderTimestamp = DateTime.Now.Subtract(TimeSpan.FromTicks(Stopwatch.Frequency / GameInstance.FPS));
+                Position currentPosition = positionMapper.Get(entityId);
+                PositionTimestamp currentPosTs = positionTsMapper.Get(entityId);
+                FuturePosition futurePosition = futurePositionMapper.Get(entityId);
 
-            // Interpolate -
-            currentPosition.X += (futurePosition.X - currentPosition.X) *
-                Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+                DateTime renderTimestamp = DateTime.Now.Subtract(TimeSpan.FromTicks(Stopwatch.Frequency / GameInstance.FPS));
 
-            currentPosition.Y += (futurePosition.Y - currentPosition.Y) *
-                Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+                // Interpolate -
+                currentPosition.X += (futurePosition.X - currentPosition.X) *
+                    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
 
-            // In case of interpolation ending -
-            if (currentPosition.Equals(futurePosition)) {
-                currentPosTs.Timestamp = futurePosition.Timestamp;
-                futurePositionMapper.Delete(entityId);
+                currentPosition.Y += (futurePosition.Y - currentPosition.Y) *
+                    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+
+                // In case of interpolation ending -
+                if (currentPosition.Equals(futurePosition)) {
+                    currentPosTs.Timestamp = futurePosition.Timestamp;
+                    futurePositionMapper.Delete(entityId);
+                }
             }
         }
     }
