@@ -34,11 +34,14 @@ namespace ProjectBoomixCore.Game.Systems {
                 DateTime renderTimestamp = DateTime.Now.Subtract(TimeSpan.FromTicks(Stopwatch.Frequency / GameInstance.FPS));
 
                 // Interpolate -
-                currentPosition.X += (futurePosition.X - currentPosition.X) *
-                    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+                //currentPosition.X += (futurePosition.X - currentPosition.X) *
+                //    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
 
-                currentPosition.Y += (futurePosition.Y - currentPosition.Y) *
-                    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+                //currentPosition.Y += (futurePosition.Y - currentPosition.Y) *
+                //    Math.Min((renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
+
+                currentPosition.X = futurePosition.X;
+                currentPosition.Y = futurePosition.Y;
 
                 // In case of interpolation ending -
                 if (currentPosition.Equals(futurePosition)) {

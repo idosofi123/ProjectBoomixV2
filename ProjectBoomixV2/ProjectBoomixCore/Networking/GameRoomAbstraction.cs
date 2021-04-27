@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using MonoGame.Extended.Entities;
 using ProjectBoomixCore.Game;
 using ProjectBoomixCore.Networking.Packets;
 
@@ -17,8 +16,6 @@ namespace ProjectBoomixCore.Networking {
 
         public ServerGameInstance Game;
 
-        private Dictionary<string, int> clientIDtoEntityID;
-
         protected Thread                  gameRoomThread;
         protected List<string>            playersToBeApproved;
         protected Queue<SentClientPacket> packetsToHandle;
@@ -29,7 +26,6 @@ namespace ProjectBoomixCore.Networking {
             this.gameRoomThread = new Thread(this.RunHostLoop);
             this.packetsToHandle = new Queue<SentClientPacket>();
             this.playersToBeApproved = playerWhitelist;
-            this.clientIDtoEntityID = new Dictionary<string, int>();
 
             this.Game = new ServerGameInstance();
             foreach (string playerID in this.playersToBeApproved) {
@@ -56,9 +52,11 @@ namespace ProjectBoomixCore.Networking {
 
             SentClientPacket receivedPacket;
             Stopwatch stopwatch = new Stopwatch();
-            long tickCounter = 0, tickRemainder = 0;
+            Stopwatch fpsWatch = new Stopwatch();
+            long tickCounter = 0, tickRemainder = 0, frame = 0;
 
             stopwatch.Start();
+            fpsWatch.Start();
 
             while (this.IsRunning) { 
 
@@ -78,8 +76,10 @@ namespace ProjectBoomixCore.Networking {
 
                 // Playing catch-up and updating the game state in a fixed timestep.
                 while (tickCounter >= TICKS_PER_FRAME) {
+
                     this.Game.Update();
                     tickCounter -= TICKS_PER_FRAME;
+                    frame++;
 
                     // Broadcast new game state and include remaining lag for potential rendering extrapolation.
                     if (tickCounter < TICKS_PER_FRAME) {
@@ -88,6 +88,12 @@ namespace ProjectBoomixCore.Networking {
                         stopwatch.Restart();
                     }
                 }
+
+                //if (fpsWatch.ElapsedMilliseconds >= 1000) {
+                //    System.Console.WriteLine($"FPS: {frame}");
+                //    frame = 0;
+                //    fpsWatch.Restart();
+                //}
             }
         }
     }
