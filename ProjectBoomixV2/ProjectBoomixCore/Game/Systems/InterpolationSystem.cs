@@ -36,7 +36,7 @@ namespace ProjectBoomixCore.Game.Systems {
                 // Interpolate -
                 currentPosition.X += (futurePosition.X - currentPosition.X) *
                     (float)Math.Min((double)(renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (double)(futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
-
+                
                 currentPosition.Y += (futurePosition.Y - currentPosition.Y) *
                     (float)Math.Min((double)(renderTimestamp.Ticks - currentPosTs.Timestamp.Ticks) / (double)(futurePosition.Timestamp.Ticks - currentPosTs.Timestamp.Ticks), 1);
 
@@ -44,7 +44,6 @@ namespace ProjectBoomixCore.Game.Systems {
                 if (currentPosition.Equals(futurePosition)) {
                     currentPosTs.Timestamp = futurePosition.Timestamp;
                     futurePositionMapper.Delete(entityId);
-                    Console.WriteLine("Reached destination");
                 }
             }
         }
