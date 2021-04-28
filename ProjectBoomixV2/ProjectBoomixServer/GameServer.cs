@@ -22,7 +22,7 @@ namespace ProjectBoomixServer {
             // TODO: Main server loop - creates game rooms for users to connect to and such, communicate with rest API server
 
             // Temporarily - add a single game room for the testing
-            GameRoom tempGameRoom = new GameRoom(17420, new List<string>(new[] { "idoplay", "amitse" }));
+            GameRoom tempGameRoom = new GameRoom(17420, new List<string>(new[] { "Tay1", "Tay2" }));
             gameRooms.Add(17420, tempGameRoom);
 
             tempGameRoom.Start();

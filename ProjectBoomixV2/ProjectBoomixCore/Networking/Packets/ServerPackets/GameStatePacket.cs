@@ -38,10 +38,10 @@ namespace ProjectBoomixCore.Networking.Packets {
                 } catch (KeyNotFoundException e) {
                     entity = client.Game.AddPlayer(change.PlayerID);
                     entity.Attach(change.NewComponent);
-                    entity.Attach(new PositionTimestamp(DateTime.Now));
                 }
+
                 Position newPosition = (Position)(change.NewComponent);
-                entity.Attach(new FuturePosition(newPosition.X, newPosition.Y, DateTime.Now));
+                entity.Attach<FuturePosition>(new FuturePosition(newPosition.X, newPosition.Y, DateTime.Now));
             }
         }
 

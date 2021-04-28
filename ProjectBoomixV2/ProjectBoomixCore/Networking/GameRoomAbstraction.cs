@@ -75,25 +75,27 @@ namespace ProjectBoomixCore.Networking {
                 }
 
                 // Playing catch-up and updating the game state in a fixed timestep.
-                while (tickCounter >= TICKS_PER_FRAME) {
+                if (tickCounter >= TICKS_PER_FRAME) {
+                    stopwatch.Restart();
+                    while (tickCounter >= TICKS_PER_FRAME) {
 
-                    this.Game.Update();
-                    tickCounter -= TICKS_PER_FRAME;
-                    frame++;
+                        this.Game.Update();
+                        tickCounter -= TICKS_PER_FRAME;
+                        frame++;
 
-                    // Broadcast new game state and include remaining lag for potential rendering extrapolation.
-                    if (tickCounter < TICKS_PER_FRAME) {
-                        this.BroadcastNewGameState(tickCounter);
-                        tickRemainder = tickCounter;
-                        stopwatch.Restart();
+                        // Broadcast new game state and include remaining lag for potential rendering extrapolation.
+                        if (tickCounter < TICKS_PER_FRAME) {
+                            this.BroadcastNewGameState(tickCounter);
+                            tickRemainder = tickCounter;
+                        }
                     }
                 }
 
-                //if (fpsWatch.ElapsedMilliseconds >= 1000) {
-                //    System.Console.WriteLine($"FPS: {frame}");
-                //    frame = 0;
-                //    fpsWatch.Restart();
-                //}
+                if (fpsWatch.ElapsedMilliseconds >= 1000) {
+                    System.Console.WriteLine($"FPS: {frame}");
+                    frame = 0;
+                    fpsWatch.Restart();
+                }
             }
         }
     }
